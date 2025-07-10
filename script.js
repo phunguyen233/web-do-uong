@@ -2,11 +2,11 @@
 const hero = document.querySelector('.hero');
 const slides = document.querySelectorAll('.slide');
 const images = [
-  'img/img2.jpg',
-  'img/img3.jpg',
-  'img/img7.jpg',
-  'img/img5.jpg',
-  'img/img4.jpg',
+  'img2.jpg',
+  'img3.jpg',
+  'img7.jpg',
+  'img5.jpg',
+  'img4.jpg',
 ];
 let index = 0;
 
