@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Trang Quản Lý - Bếp Mầm</title>
+    <link rel="icon" href="img/logo.jpg" >
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        display: flex;
+        height: 100vh;
+      }
+
+      .sidebar {
+        width: 220px;
+        background: #2c3e50;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      .sidebar h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .sidebar a {
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      .sidebar a:hover {
+        background: #34495e;
+      }
+
+      .main {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .section {
+        display: none;
+      }
+
+      .section.active {
+        display: block;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background: #eee;
+      }
+
+      .invoice-card {
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      /* CSS công tắc bật/tắt */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        border-radius: 24px;
+        transition: 0.4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.4s;
+      }
+
+      input:checked + .slider {
+        background-color: #4caf50;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h2>🛠️ Admin</h2>
+      <a href="#" onclick="showSection('danhsach_hoadon')"
+        >📜 Danh sách hóa đơn</a
+      >
+      <a href="#" onclick="showSection('sanpham')">📦 Sản phẩm</a>
+      <a href="index.html">🏠 Trang chủ</a>
+      <a href="#" onclick="confirmLogout()">🚪 Đăng xuất</a>
+    </div>
+
+    <div class="main">
+      <!-- Hóa đơn -->
+      <div id="danhsach_hoadon" class="section active">
+        <h3>📜 Danh sách hóa đơn</h3>
+        <div id="invoice-list"></div>
+      </div>
+
+      <!-- Sản phẩm -->
+      <div id="sanpham" class="section">
+        <h3>📦 Quản lý sản phẩm</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Mã SP</th>
+              <th>Tên sản phẩm</th>
+              <th>Giá</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody id="sanpham-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      // Dữ liệu sản phẩm mặc định
+      const defaultProducts = {
+        SP01: { name: "Nước cam", price: 45000, active: true },
+        SP02: { name: "Sinh tố bơ", price: 65000, active: true },
+        SP03: { name: "Nước lê", price: 45000, active: true },
+        SP04: { name: "Nước dứa", price: 50000, active: true },
+        SP05: { name: "Sữa óc chó", price: 45000, active: true },
+      };
+
+      // Lấy dữ liệu từ localStorage hoặc gán mặc định
+      const products =
+        JSON.parse(localStorage.getItem("products")) || defaultProducts;
+      localStorage.setItem("products", JSON.stringify(products));
+
+      // Hiển thị từng section
+      function showSection(id) {
+        document.querySelectorAll(".section").forEach((sec) => {
+          sec.classList.remove("active");
+        });
+        document.getElementById(id)?.classList.add("active");
+
+        if (id === "danhsach_hoadon") renderInvoiceList();
+        if (id === "sanpham") renderSanpham();
+      }
+
+      // Đăng xuất
+      function confirmLogout() {
+        if (confirm("Bạn có chắc muốn đăng xuất không?")) {
+          window.location.href = "login.html"; // hoặc index.html
+        }
+      }
+
+      // Hiển thị hóa đơn
+      function renderInvoiceList() {
+        const listContainer = document.getElementById("invoice-list");
+        const invoices = JSON.parse(localStorage.getItem("invoices")) || [];
+
+        if (invoices.length === 0) {
+          listContainer.innerHTML = "<p>⚠️ Chưa có hóa đơn nào.</p>";
+          return;
+        }
+
+        let html = "";
+        invoices.forEach((invoice, index) => {
+          const itemsHtml = invoice.items
+            .map(
+              (item) => `
+                <tr>
+                  <td>${item.name}</td>
+                  <td>${item.quantity}</td>
+                  <td>${item.price.toLocaleString()} đ</td>
+                  <td>${(item.price * item.quantity).toLocaleString()} đ</td>
+                </tr>
+              `
+            )
+            .join("");
+
+          const total = invoice.items.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
+          );
+
+          html += `
+            <div class="invoice-card">
+              <h4>🧾 Hóa đơn #${index + 1} - ${invoice.customer.date}</h4>
+              <p><strong>👤 Tên:</strong> ${invoice.customer.name}</p>
+              <p><strong>📞 SĐT:</strong> ${invoice.customer.phone}</p>
+              <p><strong>📍 Địa chỉ:</strong> ${invoice.customer.address}</p>
+              <table>
+                <thead>
+                  <tr><th>Tên SP</th><th>SL</th><th>Đơn giá</th><th>Thành tiền</th></tr>
+                </thead>
+                <tbody>${itemsHtml}</tbody>
+              </table>
+              <p style="text-align:right; margin-top:10px;"><strong>Tổng cộng:</strong> ${total.toLocaleString()} đ</p>
+            </div>
+          `;
+        });
+
+        listContainer.innerHTML = html;
+      }
+
+      // Hiển thị sản phẩm
+      function renderSanpham() {
+        const tbody = document.getElementById("sanpham-table");
+        tbody.innerHTML = "";
+
+        for (const [code, sp] of Object.entries(products)) {
+          tbody.innerHTML += `
+            <tr>
+              <td>${code}</td>
+              <td>${sp.name}</td>
+              <td>${sp.price.toLocaleString()} đ</td>
+              <td>
+                <label class="switch">
+                  <input type="checkbox" ${
+                    sp.active ? "checked" : ""
+                  } onchange="toggleStatus('${code}')" />
+                  <span class="slider"></span>
+                </label>
+              </td>
+            </tr>
+          `;
+        }
+      }
+
+      // Bật/tắt sản phẩm
+      function toggleStatus(code) {
+        products[code].active = !products[code].active;
+        localStorage.setItem("products", JSON.stringify(products));
+        renderSanpham();
+      }
+
+      // Gọi khi tải trang
+      document.addEventListener("DOMContentLoaded", () => {
+        renderInvoiceList();
+        renderSanpham();
+      });
+    </script>
+  </body>
+</html>

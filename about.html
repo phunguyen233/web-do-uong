@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Giới thiệu sản phẩm - Bếp Mầm</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="img/logo.jpg" >
+    <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" 
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      .about-content {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 1rem;
+      }
+
+      .about-content h2 {
+        font-size: 2rem;
+        color: #43ac6a;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .product-container {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .product-list {
+        flex: 1;
+        min-width: 250px;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .product-item {
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #fcfafa;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .product-item:hover {
+        background: #f5f3f3;
+      }
+
+      .product-item.active {
+        background: #1d5237;
+        border-color: #f4f5f4;
+      }
+
+      .product-title {
+        font-size: 1.2rem;
+        color: #43ac6a;
+        font-weight: bold;
+      }
+
+      .product-detail {
+        flex: 2;
+        min-width: 300px;
+        border: 1px solid #f9f6f6;
+        border-radius: 10px;
+        padding: 1rem;
+        background: #f0eeee;
+        display: none;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .product-detail img {
+        width: 250px;
+        border-radius: 12px;
+        flex-shrink: 0;
+      }
+
+      .product-detail.show {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+        <div class="logo">
+            <img src="img/logo.jpg" alt="logo" class="logo-img">
+            <p class="logo-text">BẾP MẦM</p> 
+        </div>
+
+        <div class="menu">
+          <nav class="nav">
+              <ul class="nav-links">
+                  <li><a href="index.html">Trang chủ</a></li>
+                  <li><a href="about.html">Giới thiệu</a></li>
+                  <li><a href="products.html">Sản phẩm</a></li>
+                  <!-- ICON GIỎ HÀNG TRÊN HEADER -->
+                  <div class="cart-container">
+                      <a href="#" id="cart-button" title="Xem giỏ hàng" >
+                          🛒
+                          <span class="cart-count" id="cart-count">0</span>
+                      </a>
+
+                      <!-- MODAL HIỂN THỊ DANH SÁCH SẢN PHẨM TRONG GIỎ -->
+                      <div class="cart-dropdown" id="cart-dropdown">
+                          <h3>Giỏ hàng</h3>
+                          <ul id="cart-items">
+                          <li>Chưa có sản phẩm nào</li>
+                          </ul>
+                          <div class="cart-total">
+                          <span>Tổng: </span><span id="cart-total">0</span> đ
+                          </div>
+                          <a href="checkout.html" class="btn">Thanh toán</a>
+                      </div>
+                  </div>
+
+                  <!-- Nơi hiển thị icon đăng nhập / đăng xuất -->
+                  <li id="user-menu">
+                      <a href="login.html" title="Đăng nhập">
+                          <i class="fas fa-user-circle" style="font-size:1.5rem;" id="user-icon"></i>
+                      </a>
+                  </li>
+
+              </ul>
+          </nav>  
+        </div>
+    </header>
+
+    <main>
+      <div class="about-content">
+        <h2>Giới thiệu sản phẩm</h2>
+        <div class="product-container">
+          <div class="product-list">
+            <div class="product-item" onclick="showProductDetail(0)">
+              <div class="product-title">Nước Dứa</div>
+            </div>
+            <div class="product-item" onclick="showProductDetail(1)">
+              <div class="product-title">Nước Lê</div>
+            </div>
+            <div class="product-item" onclick="showProductDetail(2)">
+              <div class="product-title">Sinh Tố Bơ</div>
+            </div>
+            <div class="product-item" onclick="showProductDetail(3)">
+              <div class="product-title">Nước Cam</div>
+            </div>
+            <div class="product-item" onclick="showProductDetail(4)">
+              <div class="product-title">Sữa Óc Chó</div>
+            </div>
+          </div>
+
+          <div class="product-detail" id="product-detail">
+            <img id="product-img" src="" alt="Ảnh sản phẩm" />
+            <p id="product-desc"></p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-about">
+                <h3>Tươi Từ Hạt Lành Từ Tâm</h3>
+                <p>Hương vị tự nhiên, an toàn tuyệt đối, mang lại sức khỏe vàng cho cả gia đình bạn!</p>
+            </div>
+            <div class="footer-links">
+                <h4>Liên kết nhanh</h4>
+                <ul>
+                    <li><a href="index.html">Trang Chủ</a></li>
+                    <li><a href="products.html">Sản Phẩm</a></li>
+                    <li><a href="about.html">Giới Thiệu</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Liên hệ</h4>
+                <p>Điện thoại: <a href="tel:+84945079155">0945 079 155</a></p>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/bep.mam.2025?locale=vi_VN"><img src="img/logofacebook.png" alt="Facebook"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Nước từ thiên nhiên tươi mát - All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+      const products = [
+        {
+          name: "Nước Dứa",
+          img: "img/nuocdua.jpg",
+          desc: "Nước dứa Bếp Mầm được làm từ dứa tươi chọn lọc kỹ càng, không chất bảo quản, giàu vitamin C và enzym tự nhiên. Lựa chọn lý tưởng giúp giải nhiệt, thanh lọc cơ thể và hỗ trợ tiêu hóa tốt.",
+        },
+        {
+          name: "Nước Lê",
+          img: "img/nuocle.jpg",
+          desc: "Nước lê có vị ngọt nhẹ, mát lành, giàu chất chống oxy hóa và vitamin C. Hỗ trợ tăng sức đề kháng, làm dịu cổ họng và làm đẹp da.",
+        },
+        {
+          name: "Sinh Tố Bơ",
+          img: "img/sinhtobo.jpg",
+          desc: "Sinh tố bơ được xay từ bơ sáp tươi, không đường, ít calo, phù hợp cho người ăn kiêng và cung cấp nhiều chất béo tốt cho sức khỏe tim mạch và làn da.",
+        },
+        {
+          name: "Nước Cam",
+          img: "img/nuoccam.jpg",
+          desc: "Nước cam Bếp Mầm là thức uống giàu vitamin C, được ép từ cam tươi, giúp tăng sức đề kháng, làm đẹp da và giải khát hiệu quả. Hương vị chua ngọt tự nhiên, tươi mát, phù hợp cho mọi lứa tuổi.",
+        },
+        {
+          name: "Sữa Óc Chó",
+          img: "img/suaoccho.jpg",
+          desc: "Sữa óc chó giàu omega-3, tốt cho tim mạch và trí não, vị béo nhẹ, thơm ngon, dễ uống.",
+        },
+      ];
+
+      function showProductDetail(index) {
+        const detailBox = document.getElementById("product-detail");
+        const img = document.getElementById("product-img");
+        const desc = document.getElementById("product-desc");
+        const items = document.querySelectorAll(".product-item");
+
+        items.forEach((item, i) => {
+          item.classList.toggle("active", i === index);
+        });
+
+        img.src = products[index].img;
+        img.alt = products[index].name;
+        desc.textContent = products[index].desc;
+        detailBox.classList.add("show");
+      }
+    </script>
+
+    <script src="script.js"></script>
+    <script src="cart.js"></script>
+  </body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đồ uống thiên nhiên - Bếp Mầm</title>
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="icon" href="img/logo.jpg" >
+    <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" 
+    />
+
+    <meta name="google-site-verification" content="HQ4ATajCJxrwQU952ESuy8UHD_JaR6zvD__YVry3sek" />
+
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="img/logo.jpg" alt="logo" class="logo-img">
+            <p class="logo-text">BẾP MẦM</p> 
+        </div>
+
+        <div class="menu">
+            <nav class="nav">
+                <ul class="nav-links">
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li><a href="about.html">Giới thiệu</a></li>
+                    <li><a href="products.html">Sản phẩm</a></li>
+                    <!-- ICON GIỎ HÀNG TRÊN HEADER -->
+                    <div class="cart-container">
+                        <a href="#" id="cart-button" title="Xem giỏ hàng" >
+                            🛒
+                            <span class="cart-count" id="cart-count">0</span>
+                        </a>
+
+                        <!-- MODAL HIỂN THỊ DANH SÁCH SẢN PHẨM TRONG GIỎ -->
+                        <div class="cart-dropdown" id="cart-dropdown">
+                            <h3>Giỏ hàng</h3>
+                            <ul id="cart-items">
+                            <li>Chưa có sản phẩm nào</li>
+                            </ul>
+                            <div class="cart-total">
+                            <span>Tổng: </span><span id="cart-total">0</span> đ
+                            </div>
+                            <a href="checkout.html" class="btn">Thanh toán</a>
+                        </div>
+                    </div>
+
+                    <!-- Nơi hiển thị icon đăng nhập / đăng xuất -->
+                    <li id="user-menu">
+                        <a href="login.html" title="Đăng nhập">
+                            <i class="fas fa-user-circle" style="font-size:1.5rem;" id="user-icon"></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>  
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" >
+                <div class="hero-text">
+                    <h1>Đánh thức sức sống - Tươi ngon từng ngụm</h1>
+                    <p>Tinh túy tốt nhất của tự nhiên tại đây hãy khám phá sản phẩm này</p>
+                    <div class="hero-buttons">
+                        <a href="products.html" class=" btn-discover">khám phá</a>
+                    </div>  
+                
+                </div>
+                <div class="slide"></div>
+                <div class="slide"></div>
+                <div class="slide"></div>
+                <div class="slide"></div>
+                <div class="slide"></div>
+                <div class="dots"></div>
+            
+        </section>
+        
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-about">
+                <h3>Tươi Từ Hạt Lành Từ Tâm</h3>
+                <p>Hương vị tự nhiên, an toàn tuyệt đối, mang lại sức khỏe vàng cho cả gia đình bạn!</p>
+            </div>
+            <div class="footer-links">
+                <h4>Liên kết nhanh</h4>
+                <ul>
+                    <li><a href="index.html">Trang Chủ</a></li>
+                    <li><a href="products.html">Sản Phẩm</a></li>
+                    <li><a href="about.html">Giới Thiệu</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Liên hệ</h4>
+                <p>Điện thoại: <a href="tel:+84945079155">0945 079 155</a></p>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/bep.mam.2025?locale=vi_VN"><img src="img/logofacebook.png" alt="Facebook"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Nước từ thiên nhiên tươi mát - All Rights Reserved</p>
+        </div>
+    </footer>
+
+
+    <script src="script.js"></script>
+    <script src="cart.js"></script>
+ 
+</body>
+</html>

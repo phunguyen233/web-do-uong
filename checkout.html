@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Thông tin đặt hàng - Bếp Mầm</title>
+    <link rel="icon" href="img/logo.jpg" >
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .checkout-form {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        width: 350px;
+      }
+
+      .checkout-form h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #2c3e50;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 13px;
+        margin-top: 5px;
+        display: none;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        background: #27ae60;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #219150;
+      }
+
+      .success-message {
+        display: none;
+        margin-top: 15px;
+        text-align: center;
+        color: green;
+      }
+
+      .cb-index {
+        display: inline-block;
+        margin-bottom: 20px;
+        text-decoration: none;
+        color: #27ae60;
+      }
+
+      .cb-index:hover {
+        text-decoration: underline;
+      }
+
+      .cb-index::before {
+        content: "←";
+      }
+      
+    </style>
+  </head>
+  <body>
+    
+    <form class="checkout-form" onsubmit="handleSubmit(event)">
+      <a href="index.html" class="cb-index">Trở về Trang Chủ</a>
+      <h2>Thông tin đặt hàng</h2>
+
+      <div class="form-group">
+        <label for="name">Tên người nhận</label>
+        <input type="text" id="name" placeholder="Nguyễn Văn A" />
+        <div class="error-message" id="name-error">Vui lòng nhập họ tên.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Số điện thoại</label>
+        <input type="tel" id="phone" placeholder="Ví dụ: 0387654321" />
+        <div class="error-message" id="phone-error">
+          Số điện thoại không hợp lệ.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Địa chỉ nhận hàng</label>
+        <textarea
+          id="address"
+          rows="3"
+          placeholder="Số nhà, đường, phường, quận..."
+        ></textarea>
+        <div class="error-message" id="address-error">
+          Vui lòng nhập địa chỉ.
+        </div>
+      </div>
+
+      <button type="submit">Đặt hàng</button>
+      <div class="success-message" id="success">
+        ✅ Đặt hàng thành công! Cảm ơn bạn.
+      </div>
+    </form>
+    <script>
+      function handleSubmit(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name");
+        const phone = document.getElementById("phone");
+        const address = document.getElementById("address");
+
+        const nameError = document.getElementById("name-error");
+        const phoneError = document.getElementById("phone-error");
+        const addressError = document.getElementById("address-error");
+        const success = document.getElementById("success");
+        let isValid = true;
+
+        // Reset lỗi
+        nameError.style.display = "none";
+        phoneError.style.display = "none";
+        addressError.style.display = "none";
+        success.style.display = "none";
+
+        // Kiểm tra họ tên
+        if (name.value.trim() === "") {
+          nameError.style.display = "block";
+          isValid = false;
+        }
+
+        // Kiểm tra sđt theo đầu số VN
+        const phonePattern =
+          /^(03[2-9]|05[6|8|9]|07[0-9]|08[1-5]|09[0-9])\d{7}$/;
+        if (!phonePattern.test(phone.value.trim())) {
+          phoneError.style.display = "block";
+          isValid = false;
+        }
+
+        // Kiểm tra địa chỉ
+        if (address.value.trim().length < 5) {
+          addressError.style.display = "block";
+          isValid = false;
+        }
+
+        // Nếu hợp lệ, lưu hóa đơn
+        if (isValid) {
+          // Lấy giỏ hàng từ localStorage
+          const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+          if (cart.length === 0) {
+            alert("⚠️ Giỏ hàng đang trống!");
+            return;
+          }
+
+          // Kiểm tra từng sản phẩm có đủ thông tin không
+          const validCart = cart.every(
+            (item) => item.name && item.price && item.quantity
+          );
+          if (!validCart) {
+            alert("❌ Giỏ hàng bị lỗi dữ liệu sản phẩm. Vui lòng thêm lại.");
+            return;
+          }
+
+          // Tạo đối tượng hóa đơn
+          const invoice = {
+            customer: {
+              name: name.value.trim(),
+              phone: phone.value.trim(),
+              address: address.value.trim(),
+              date: new Date().toLocaleString("vi-VN"),
+            },
+            items: cart,
+          };
+
+          // Lưu vào danh sách hóa đơn
+          let invoices = JSON.parse(localStorage.getItem("invoices")) || [];
+          invoices.push(invoice);
+          localStorage.setItem("invoices", JSON.stringify(invoices));
+
+          // Xóa giỏ hàng
+          localStorage.removeItem("cart");
+
+          // Hiển thị thành công
+          success.style.display = "block";
+          event.target.reset();
+        }
+      }
+    </script>
+  </body>
+</html>
